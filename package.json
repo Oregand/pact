@@ -25,5 +25,8 @@
   "bugs": {
     "url": "https://github.com/Oregand/pact/issues"
   },
-  "homepage": "https://github.com/Oregand/pact#readme"
+  "homepage": "https://github.com/Oregand/pact#readme",
+  "dependencies": {
+    "eslint": "^4.18.2"
+  }
 }
