@@ -1,0 +1,29 @@
+{
+  "name": "pact",
+  "version": "1.0.0",
+  "description": "A bare bones Promise/A+ libary",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Oregand/pact.git"
+  },
+  "keywords": [
+    "javascript",
+    "promise",
+    "pact",
+    "es6",
+    "es5"
+  ],
+  "author": "David O'Regan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Oregand/pact/issues"
+  },
+  "homepage": "https://github.com/Oregand/pact#readme"
+}
