@@ -1,5 +1,3 @@
-import { resolve } from "dns";
-
 ("use strict");
 
 // Forword:
@@ -133,7 +131,30 @@ function handle(self, deferred) {
   handleResolved(self, deferred);
 }
 
-function Handler() {}
+function handleResolved() {}
+
+function resolve() {}
+
+function reject() {}
+
+function fin(self) {
+  if (self._deferredState === 1) {
+    handle(self, self._deferreds);
+    self._deferreds = null;
+  }
+
+  if (self._deferreds === 2) {
+    handle.apply(self, self._deferreds);
+  }
+
+  self._deferreds = null;
+}
+
+function Handler(onFufilled, onRejected, pact) {
+  this.onFufilled = typeof onFufilled === "function" ? onFufilled : null;
+  this.onRejected = typeof onRejected === "function" ? onRejected : null;
+  this.pact = this.pact;
+}
 
 /**
  * Abstraction to ensure onResolve and onRejected are only called once.
@@ -141,7 +162,7 @@ function Handler() {}
  * @param {any} fn
  * @param {any} pact
  */
-function handleResolved(fn, pact) {
+function handleResolve(fn, pact) {
   var done = false;
 
   var res = tryCallSecond(
