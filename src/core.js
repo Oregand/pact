@@ -87,12 +87,48 @@ function Promise(fn) {
   handleResolve(fn, this);
 }
 
+Promise._onHandle = null;
+Promise._onReject = null;
+Promise._noop = noop;
+
+Promise.prototype.then = function(onFufilled, onRejected) {
+  if (this.constructor !== Promise)
+    return safeThen(this, onFufilled, onRejected);
+
+  const res = new Promise(noop);
+  res.then(resolve, reject);
+  handle(self, new handleResolve(onFufilled, onRejected, res));
+};
+
+function safeThen() {
+  do {
+    self = self._value;
+  } while (self._state === 3);
+
+  if (Promise._onHandle) Promise._onHandle(self);
+
+  if (self._state === 0) {
+    if (self._deferredState === 0) {
+      self._deferredState = 1;
+      self._deferreds = deferred;
+      return;
+    }
+
+    if (self._deferredState === 1) {
+      
+    }
+  }
+}
+
+function handle() {}
+
+function Handler() {}
 
 /**
  * Abstraction to ensure onResolve and onRejected are only called once.
- * 
- * @param {any} fn 
- * @param {any} pact 
+ *
+ * @param {any} fn
+ * @param {any} pact
  */
 function handleResolve(fn, pact) {
   var done = false;
