@@ -62,7 +62,7 @@ function tryCallSecond(fn, a, b) {
   }
 }
 
-export default Promise;
+module.exports = Promise;
 
 /**
  *

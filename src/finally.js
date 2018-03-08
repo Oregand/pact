@@ -1,9 +1,8 @@
 "use strict";
 
-import { Promise } from "./core";
+var Promise = require("./core.js");
 
-export default Promise;
-
+module.exports = Promise;
 Promise.prototype.finally = function(fn) {
   return this.then(
     function(val) {

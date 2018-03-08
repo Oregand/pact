@@ -1,9 +1,8 @@
 "use strict";
 
-import { Promise } from "./core";
+var Promise = require("./core.js");
 
-export default Promise;
-
+module.exports = Promise;
 Promise.enableSynchronous = function() {
   Promise.prototype.isPending = function() {
     return this.getState() === 0;
