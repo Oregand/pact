@@ -2,8 +2,6 @@
 
 This is a simple implementation of Promises. It is a super set of ES6 Promises designed to have readable, performant code and to provide just the extensions that are absolutely necessary for using promises today.
 
-For detailed tutorials on its use, see www.promisejs.org
-
 **N.B.** This promise exposes internals via underscore (`_`) prefixed properties. If you use these, your code will break with each new release.
 
 ## Installation
