@@ -1,6 +1,4 @@
-import { defer } from "rxjs/observable/defer";
-
-("use strict");
+"use strict";
 
 // Forword:
 // `_` prefixed properties will be reduced to `_{random_number}`
@@ -183,13 +181,10 @@ function resolve(self, newVal) {
       new TypeError("A promise cannot be resolved in itself.")
     );
 
-  if (
-    newVal &&
-    (typeof newValue === "object" || typeof newValue === "function")
-  ) {
+  if (newVal && (typeof newVal === "object" || typeof newVal === "function")) {
     var then = getThen(newVal);
     if (then === IS_ERROR) return reject(self, LASTEST_ERROR);
-    if (then === self.then && newValue instanceof Promise) {
+    if (then === self.then && newVal instanceof Promise) {
       self._state = 3;
       self._value = newVal;
       fin(self);
@@ -274,7 +269,7 @@ function handleResolve(fn, pact) {
   );
 
   if (!done && res === IS_ERROR) {
-    done = error;
+    done = true;
     reject(pact, LASTEST_ERROR);
   }
 }
