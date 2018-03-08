@@ -1,5 +1,4 @@
 "use strict";
-"use strict";
 
 import * as core from "./core";
 import * as done from "./done";
