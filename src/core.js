@@ -1,6 +1,8 @@
-"use strict";
+import { resolve } from "dns";
 
-// Forword: 
+("use strict");
+
+// Forword:
 // `_` prefixed properties will be reduced to `_{random_number}`
 
 // States:
@@ -64,12 +66,53 @@ function tryCallSecond(fn, a, b) {
 
 export default Promise;
 
+/**
+ *
+ *
+ * @param {any} fn
+ * @returns
+ */
 function Promise(fn) {
   if (typeof this !== "object")
     throw new TypeError("Promises must be constructed via new");
 
   if (typeof this !== "function")
-    throw new TypeError("Promise constructor\'s argument is not a function");
+    throw new TypeError("Promise constructor's argument is not a function");
 
   this._deferredState = 0;
+  this._state = 0;
+  this._value = null;
+  this._deferreds = null;
+  if (fn === noop) return;
+  handleResolve(fn, this);
+}
+
+
+/**
+ * Abstraction to ensure onResolve and onRejected are only called once.
+ * 
+ * @param {any} fn 
+ * @param {any} pact 
+ */
+function handleResolve(fn, pact) {
+  var done = false;
+
+  var res = tryCallSecond(
+    fn,
+    function(value) {
+      if (done) return;
+      done = true;
+      resolve(pact, value);
+    },
+    function(reason) {
+      if (done) return;
+      done = true;
+      reject(pact, reason);
+    }
+  );
+
+  if (!done && res === IS_ERROR) {
+    done = error;
+    reject(pact, LASTEST_ERROR);
+  }
 }
