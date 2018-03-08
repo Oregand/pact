@@ -1,3 +1,5 @@
+import { defer } from "rxjs/observable/defer";
+
 ("use strict");
 
 // Forword:
@@ -98,6 +100,14 @@ Promise.prototype.then = function(onFufilled, onRejected) {
   return res;
 };
 
+/**
+ *
+ *
+ * @param {any} self
+ * @param {any} onFufilled
+ * @param {any} onRejected
+ * @returns
+ */
 function safeThen(self, onFufilled, onRejected) {
   return new self.constructor(function(resolve, reject) {
     const res = new Promise(noop);
@@ -106,6 +116,13 @@ function safeThen(self, onFufilled, onRejected) {
   });
 }
 
+/**
+ *
+ *
+ * @param {any} self
+ * @param {any} deferred
+ * @returns
+ */
 function handle(self, deferred) {
   do {
     self = self._value;
@@ -131,12 +148,56 @@ function handle(self, deferred) {
   handleResolved(self, deferred);
 }
 
-function handleResolved() {}
+/**
+ *
+ *
+ * @param {any} self
+ * @param {any} deferred
+ */
+function handleResolved(self, deferred) {
+  const callBck = self._state === 1 ? deferred.onFufilled : deferred.onRejected;
 
-function resolve() {}
+  if (callBck === null) {
+    if (self._state === 1) resolve(deferred.pact, self._value);
+    else reject(deferred.pact, self._value);
 
-function reject() {}
+    return;
+  }
 
+  const ret = tryCallFirst(callBck, self._value);
+
+  if (ret === IS_ERROR) reject(deferred.pact, LASTEST_ERROR);
+  else resolve(deferred.pact, ret);
+}
+
+/**
+ *
+ *
+ * @param {any} self
+ * @param {any} newVal
+ */
+function resolve(self, newVal) {}
+
+/**
+ *
+ *
+ * @param {any} self
+ * @param {any} newVal
+ */
+function reject(self, newVal) {
+  self._state = 2;
+  self._value = newVal;
+
+  if (Promise._onReject) Promise._onReject(self, newVal);
+
+  fin(self);
+}
+
+/**
+ *
+ *
+ * @param {any} self
+ */
 function fin(self) {
   if (self._deferredState === 1) {
     handle(self, self._deferreds);
@@ -150,6 +211,13 @@ function fin(self) {
   self._deferreds = null;
 }
 
+/**
+ *
+ *
+ * @param {any} onFufilled
+ * @param {any} onRejected
+ * @param {any} pact
+ */
 function Handler(onFufilled, onRejected, pact) {
   this.onFufilled = typeof onFufilled === "function" ? onFufilled : null;
   this.onRejected = typeof onRejected === "function" ? onRejected : null;
