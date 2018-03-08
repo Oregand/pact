@@ -171,12 +171,38 @@ function handleResolved(self, deferred) {
 }
 
 /**
- *
+ * Promise Resolution Procedure: https://github.com/promises-aplus/promises-spec#the-promise-resolution-procedure
  *
  * @param {any} self
  * @param {any} newVal
  */
-function resolve(self, newVal) {}
+function resolve(self, newVal) {
+  if (newVal === self)
+    return reject(
+      self,
+      new TypeError("A promise cannot be resolved in itself.")
+    );
+
+  if (
+    newVal &&
+    (typeof newValue === "object" || typeof newValue === "function")
+  ) {
+    var then = getThen(newVal);
+    if (then === IS_ERROR) return reject(self, LASTEST_ERROR);
+    if (then === self.then && newValue instanceof Promise) {
+      self._state = 3;
+      self._value = newVal;
+      fin(self);
+      return;
+    } else if (typeof then === "function") {
+      handleResolve(then.bind(newVal), self);
+      return;
+    }
+  }
+  self._state = 1;
+  self._value = newVal;
+  fin(self);
+}
 
 /**
  *
