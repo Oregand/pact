@@ -96,11 +96,19 @@ Promise.prototype.then = function(onFufilled, onRejected) {
     return safeThen(this, onFufilled, onRejected);
 
   const res = new Promise(noop);
-  res.then(resolve, reject);
-  handle(self, new handleResolve(onFufilled, onRejected, res));
+  handle(this, new Handler(onFufilled, onRejected, res));
+  return res;
 };
 
-function safeThen() {
+function safeThen(self, onFufilled, onRejected) {
+  return new self.constructor(function(resolve, reject) {
+    const res = new Promise(noop);
+    res.then(resolve, reject);
+    handle(self, new handleResolve(onFufilled, onRejected, res));
+  });
+}
+
+function handle(self, deferred) {
   do {
     self = self._value;
   } while (self._state === 3);
@@ -115,12 +123,15 @@ function safeThen() {
     }
 
     if (self._deferredState === 1) {
-      
+      self._deferredState = 2;
+      self._deferreds = [self._deferreds, deferred];
+      return;
     }
+    self._deferreds.push(deferred);
+    return;
   }
+  handleResolved(self, deferred);
 }
-
-function handle() {}
 
 function Handler() {}
 
@@ -130,7 +141,7 @@ function Handler() {}
  * @param {any} fn
  * @param {any} pact
  */
-function handleResolve(fn, pact) {
+function handleResolved(fn, pact) {
   var done = false;
 
   var res = tryCallSecond(

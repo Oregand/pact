@@ -7,19 +7,17 @@
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,json,css,md}": ["prettier --write", "git add"]
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Oregand/pact.git"
   },
-  "keywords": [
-    "javascript",
-    "promise",
-    "pact",
-    "es6",
-    "es5"
-  ],
+  "keywords": ["javascript", "promise", "pact", "es6", "es5"],
   "author": "David O'Regan",
   "license": "MIT",
   "bugs": {
@@ -27,6 +25,11 @@
   },
   "homepage": "https://github.com/Oregand/pact#readme",
   "dependencies": {
-    "eslint": "^4.18.2"
+    "eslint": "^4.18.2",
+    "prettier": "^1.11.1"
+  },
+  "devDependencies": {
+    "husky": "^0.14.3",
+    "lint-staged": "^7.0.0"
   }
 }
