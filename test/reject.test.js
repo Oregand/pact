@@ -2,7 +2,7 @@
 
 var assert = require("assert");
 var Promise = require("../");
-var tracking = require("../lib/rejection-tracking");
+var tracking = require("../lib/reject");
 
 describe("unhandled rejections", function() {
   it("tracks rejected promises", function(done) {
