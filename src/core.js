@@ -1,14 +1,25 @@
 "use strict";
 
-// Forword:
-// `_` prefixed properties will be reduced to `_{random_number}`
+/**
+ * pact Module
+ * @module src/core
+ * @see module:src/core
+ */
 
-// States:
-// 0 -> Pending
-// 1 -> Fufilled with _value
-// 2 -> Rejected with _value
-// 3 -> Took state of another promise, _value
+/** Forword:
+ * `_` prefixed properties will be reduced to `_{random_number}`
+ *
+ * States:
+ * 0 -> Pending
+ * 1 -> Fufilled with _value
+ * 2 -> Rejected with _value
+ * 3 -> Took state of another promise, _value
+ */
 
+/**
+ *
+ *
+ */
 function noop() {}
 
 var LASTEST_ERROR = null;
@@ -31,7 +42,7 @@ function getThen(obj) {
 
 /**
  *
- *
+ * Takes fn and argument, returns error
  * @param {any} fn
  * @param {any} a
  * @returns
@@ -46,8 +57,7 @@ function tryCallFirst(fn, a) {
 }
 
 /**
- *
- *
+ * Takes fn and arguments, returns error
  * @param {any} fn
  * @param {any} a
  * @param {any} b
@@ -74,7 +84,7 @@ function Promise(fn) {
   if (typeof this !== "object")
     throw new TypeError("Promises must be constructed via new");
 
-  if (typeof this !== "function")
+  if (typeof fn !== "function")
     throw new TypeError("Promise constructor's argument is not a function");
 
   this._deferredState = 0;
