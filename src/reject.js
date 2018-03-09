@@ -1,7 +1,6 @@
 "use strict";
 
-import { Promise } from "./core";
-
+var Promise = require("./core");
 var DEFAULT_WHITELIST = [ReferenceError, TypeError, RangeError];
 
 var enabled = false;

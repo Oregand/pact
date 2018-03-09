@@ -1,9 +1,8 @@
 "use strict";
 
-import { Promise } from "./core";
+var Promise = require("./core.js");
 
-export default Promise;
-
+module.exports = Promise;
 Promise.prototype.done = function(onFufilled, onRejected) {
   const self = arguments.length ? this.then.apply(this, arguments) : this;
 

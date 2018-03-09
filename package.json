@@ -1,14 +1,18 @@
 {
   "name": "pact",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "A bare bones Promise/A+ libary",
   "main": "index.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "prepublish": "node build",
+    "pretest": "node build",
+    "pretest-resolve": "node build",
+    "test": "mocha --bail --timeout 200 --slow 99999 -R dot",
+    "test-resolve": "mocha test/resolve.test.js --timeout 200 --slow 999999"
   },
   "lint-staged": {
     "*.{js,json,css,md}": ["prettier --write", "git add"]
@@ -24,12 +28,14 @@
     "url": "https://github.com/Oregand/pact/issues"
   },
   "homepage": "https://github.com/Oregand/pact#readme",
-  "dependencies": {
-    "eslint": "^4.18.2",
-    "prettier": "^1.11.1"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "better-assert": "^1.0.2",
+    "eslint": "^4.18.2",
     "husky": "^0.14.3",
-    "lint-staged": "^7.0.0"
+    "lint-staged": "^7.0.0",
+    "mocha": "^5.0.4",
+    "prettier": "^1.11.1",
+    "promises-aplus-tests": "^2.1.2"
   }
 }
