@@ -30,6 +30,7 @@
   "homepage": "https://github.com/Oregand/pact#readme",
   "dependencies": {},
   "devDependencies": {
+    "better-assert": "^1.0.2",
     "eslint": "^4.18.2",
     "husky": "^0.14.3",
     "lint-staged": "^7.0.0",

@@ -78,17 +78,17 @@ function Promise(fn) {
   if (typeof fn !== "function")
     throw new TypeError("Promise constructor's argument is not a function");
 
-  this._deferredState = 0;
-  this._state = 0;
-  this._value = null;
-  this._deferreds = null;
+  this._98 = 0;
+  this._54 = 0;
+  this._34 = null;
+  this._7 = null;
   if (fn === noop) return;
   handleResolve(fn, this);
 }
 
-Promise._onHandle = null;
-Promise._onReject = null;
-Promise._noop = noop;
+Promise._10 = null;
+Promise._38 = null;
+Promise._20 = noop;
 
 Promise.prototype.then = function(onFufilled, onRejected) {
   if (this.constructor !== Promise)
@@ -124,24 +124,24 @@ function safeThen(self, onFufilled, onRejected) {
  */
 function handle(self, deferred) {
   do {
-    self = self._value;
-  } while (self._state === 3);
+    self = self._34;
+  } while (self._54 === 3);
 
-  if (Promise._onHandle) Promise._onHandle(self);
+  if (Promise._10) Promise._10(self);
 
-  if (self._state === 0) {
-    if (self._deferredState === 0) {
-      self._deferredState = 1;
-      self._deferreds = deferred;
+  if (self._54 === 0) {
+    if (self._98 === 0) {
+      self._98 = 1;
+      self._7 = deferred;
       return;
     }
 
-    if (self._deferredState === 1) {
-      self._deferredState = 2;
-      self._deferreds = [self._deferreds, deferred];
+    if (self._98 === 1) {
+      self._98 = 2;
+      self._7 = [self._7, deferred];
       return;
     }
-    self._deferreds.push(deferred);
+    self._7.push(deferred);
     return;
   }
   handleResolved(self, deferred);
@@ -154,16 +154,16 @@ function handle(self, deferred) {
  * @param {any} deferred
  */
 function handleResolved(self, deferred) {
-  const callBck = self._state === 1 ? deferred.onFufilled : deferred.onRejected;
+  const callBck = self._54 === 1 ? deferred.onFufilled : deferred.onRejected;
 
   if (callBck === null) {
-    if (self._state === 1) resolve(deferred.pact, self._value);
-    else reject(deferred.pact, self._value);
+    if (self._54 === 1) resolve(deferred.pact, self._34);
+    else reject(deferred.pact, self._34);
 
     return;
   }
 
-  const ret = tryCallFirst(callBck, self._value);
+  const ret = tryCallFirst(callBck, self._34);
 
   if (ret === IS_ERROR) reject(deferred.pact, LASTEST_ERROR);
   else resolve(deferred.pact, ret);
@@ -186,8 +186,8 @@ function resolve(self, newVal) {
     var then = getThen(newVal);
     if (then === IS_ERROR) return reject(self, LASTEST_ERROR);
     if (then === self.then && newVal instanceof Promise) {
-      self._state = 3;
-      self._value = newVal;
+      self._54 = 3;
+      self._34 = newVal;
       fin(self);
       return;
     } else if (typeof then === "function") {
@@ -195,8 +195,8 @@ function resolve(self, newVal) {
       return;
     }
   }
-  self._state = 1;
-  self._value = newVal;
+  self._54 = 1;
+  self._34 = newVal;
   fin(self);
 }
 
@@ -207,10 +207,10 @@ function resolve(self, newVal) {
  * @param {any} newVal
  */
 function reject(self, newVal) {
-  self._state = 2;
-  self._value = newVal;
+  self._54 = 2;
+  self._34 = newVal;
 
-  if (Promise._onReject) Promise._onReject(self, newVal);
+  if (Promise._38) Promise._38(self, newVal);
 
   fin(self);
 }
@@ -221,16 +221,16 @@ function reject(self, newVal) {
  * @param {any} self
  */
 function fin(self) {
-  if (self._deferredState === 1) {
-    handle(self, self._deferreds);
-    self._deferreds = null;
+  if (self._98 === 1) {
+    handle(self, self._7);
+    self._7 = null;
   }
 
-  if (self._deferreds === 2) {
-    handle.apply(self, self._deferreds);
+  if (self._7 === 2) {
+    handle.apply(self, self._7);
   }
 
-  self._deferreds = null;
+  self._7 = null;
 }
 
 /**
