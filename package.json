@@ -7,8 +7,12 @@
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "prepublish": "node build",
+    "pretest": "node build",
+    "pretest-resolve": "node build",
+    "test": "mocha --bail --timeout 200 --slow 99999 -R dot",
+    "test-resolve": "mocha test/resolve.test.js --timeout 200 --slow 999999"
   },
   "lint-staged": {
     "*.{js,json,css,md}": ["prettier --write", "git add"]
